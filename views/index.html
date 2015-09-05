@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body %}
+Index with jquery
+<pre id="output">
+	
+</pre>
+{% endblock %}
+
+{% block javascripts %}
+{{ super() }}
+<script>
+	$.get('http://localhost:8000/api/point/rand').then(function(data) {
+		$('#output').text(JSON.stringify(data,null,4));
+	});
+</script>
+{% endblock %}

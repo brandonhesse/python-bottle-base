@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}Welcome{% endblock %}</title>
+	{% block stylesheets %}
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<style>
+		body {
+			padding: 2em;
+		}
+		
+		pre {
+			font-size: 9pt;
+			padding: 1em;
+			background: #c7c7c7;
+		}
+	</style>
+	{% endblock %}
+</head>
+<body>
+	{% block body %}
+	{% endblock %}
+	{% block javascripts %}
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	{% endblock %}
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% if error -%}
+<h3>Database "points" could not be created.</h3>
+<p>{{error}}</p>
+{%- else -%}
+<h3>Created the database "points".</h3>
+{%- endif %}
+{% endblock %}
