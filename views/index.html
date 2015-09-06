@@ -11,7 +11,7 @@ Index with jquery
 {{ super() }}
 <script>
 	$.get('http://localhost:8000/api/point/rand').then(function(data) {
-		$('#output').text(JSON.stringify(data,null,4));
+		$('#output').text(JSON.stringify(data,null,2));
 	});
 </script>
 {% endblock %}
