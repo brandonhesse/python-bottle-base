@@ -31,7 +31,7 @@ template = bottle.jinja2_template
 @root.route('/static/<filepath:path>')
 def server_static(filepath):
 	'''Serve static files (testing only)'''
-    return bottle.static_file(filepath, root=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static'))
+	return bottle.static_file(filepath, root=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static'))
 
 # Route definitions via annotations
 # Index is default entry point
@@ -76,12 +76,20 @@ def api_point_get(db, row_id=None):
 		c = db.execute('SELECT id, x, y FROM points LIMIT 0,20')
 		print("Got multiple points")
 		rows = c.fetchall()
-		data = [{ 'id': row[0], 'x':row[1], 'y':row[2]} for row in rows]
+		if not rows:
+			data = []
+		else:
+			data = [{ 'id': row[0], 'x': row[1], 'y': row[2] } for row in rows]
 	else: # Get a specific point
 		c = db.execute('SELECT * FROM points WHERE id = ? LIMIT 1', (row_id, )) #escapes the id safely
 		print("Got a single point")
 		row = c.fetchone()
-		data = { 'id': row[0], 'x':row[1], 'y':row[2] } 
+		if not row:
+			msg = "cannot find point with id '{}'".format(row_id)
+			bottle.response.status = 404
+			return { 'error': msg }
+		else:
+			data = { 'id': row[0], 'x': row[1], 'y': row[2] } 
 	return { 'lastRetrieved': datetime.datetime.now(), 'data': data }
 
 # Make and store new points via JSON
@@ -100,7 +108,8 @@ def db_insert_point(db):
 		db.commit()
 	except sqlite.sqlite3.Error as er: # Handle insert errors
 		error = er.args[0]
-		return bottle.Response({ 'err': error }, 400)
+		bottle.response.status = 400
+		return { 'err': error }
 	else:
 		row_id = c.lastrowid
 		return { 'id': row_id }
